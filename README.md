@@ -19,4 +19,4 @@ Dataset provided by CareerFoundry
 
 ## Link to Tableau Visualizations
 https://public.tableau.com/shared/C4K5WNMFK?:display_count=n&:origin=viz_share_link
-https://public.tableau.com/views/FrequencyofFilmRentalsbyDuration/FilmRentalDuration?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
+
