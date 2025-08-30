@@ -1,0 +1,4 @@
+SELECT title, COUNT(*) 
+FROM film 
+GROUP BY title  
+ORDER BY COUNT(*) DESC;
