@@ -1,0 +1,2 @@
+SELECT COUNT (inventory_id) AS inventory_count
+FROM inventory
