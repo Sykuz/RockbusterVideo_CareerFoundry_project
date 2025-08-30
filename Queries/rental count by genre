@@ -1,0 +1,27 @@
+--Step 1: Get total rentals across all genres
+WITH total_rentals AS (
+    SELECT COUNT(*) AS total
+    FROM rental
+),
+
+--Step 2: Get rental count per genre
+genre_rentals AS (
+    SELECT 
+        cat.name AS genre,
+        COUNT(r.rental_id) AS rental_count
+    FROM rental r
+    JOIN inventory i ON r.inventory_id = i.inventory_id
+    JOIN film f ON i.film_id = f.film_id
+    JOIN film_category fc ON f.film_id = fc.film_id
+    JOIN category cat ON fc.category_id = cat.category_id
+    GROUP BY cat.name
+)
+
+-- Final: add percent of Total
+SELECT 
+    gr.genre,
+    gr.rental_count,
+    ROUND((gr.rental_count * 100.0) / tr.total, 2) AS percent_of_total_rentals
+FROM genre_rentals gr
+JOIN total_rentals tr ON true
+ORDER BY percent_of_total_rentals DESC;
