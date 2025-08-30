@@ -1,0 +1,56 @@
+--Step 1: Get the top 10 countries by total revenue
+WITH top_countries AS (
+    SELECT co.country_id, co.country, SUM(p.amount) AS total_revenue
+    FROM payment p
+    JOIN customer c ON p.customer_id = c.customer_id
+    JOIN address a ON c.address_id = a.address_id
+    JOIN city ci ON a.city_id = ci.city_id
+    JOIN country co ON ci.country_id = co.country_id
+    GROUP BY co.country_id, co.country
+    ORDER BY total_revenue DESC
+    LIMIT 10
+),
+
+--Step 2: Get revenue by genre per country
+genre_revenue AS (
+    SELECT 
+        co.country,
+        cat.name AS genre,
+        SUM(p.amount) AS genre_revenue
+    FROM payment p
+    JOIN rental r ON p.rental_id = r.rental_id
+    JOIN inventory i ON r.inventory_id = i.inventory_id
+    JOIN film f ON i.film_id = f.film_id
+    JOIN film_category fc ON f.film_id = fc.film_id
+    JOIN category cat ON fc.category_id = cat.category_id
+    JOIN customer c ON p.customer_id = c.customer_id
+    JOIN address a ON c.address_id = a.address_id
+    JOIN city ci ON a.city_id = ci.city_id
+    JOIN country co ON ci.country_id = co.country_id
+    WHERE co.country IN (SELECT country FROM top_countries)
+    GROUP BY co.country, cat.name
+),
+
+--Step 3: Total revenue per country for % calculation
+country_totals AS (
+    SELECT 
+        co.country,
+        SUM(p.amount) AS total_revenue
+    FROM payment p
+    JOIN customer c ON p.customer_id = c.customer_id
+    JOIN address a ON c.address_id = a.address_id
+    JOIN city ci ON a.city_id = ci.city_id
+    JOIN country co ON ci.country_id = co.country_id
+    WHERE co.country IN (SELECT country FROM top_countries)
+    GROUP BY co.country
+)
+
+--Final output: revenue and % revenue per genre
+SELECT 
+    gr.country,
+    gr.genre,
+    gr.genre_revenue,
+    ROUND((gr.genre_revenue * 100.0) / ct.total_revenue, 2) AS percent_of_country_revenue
+FROM genre_revenue gr
+JOIN country_totals ct ON gr.country = ct.country
+ORDER BY gr.country, percent_of_country_revenue DESC;
