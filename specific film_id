@@ -1,5 +1,0 @@
-Find the film_id for the movie African Egg.
-
-SELECT film_id
-FROM film
-WHERE title = 'African Egg'
