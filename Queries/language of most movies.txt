@@ -1,0 +1,8 @@
+What language are the majority of movies in the Rockbuster collection?
+
+SELECT l.name AS language_name COUNT(f.film_id) AS number_of_movies
+FROM film f
+JOIN language l ON f.language_id = l.language_id
+GROUP BY l.name
+ORDER BY number_of_movies DESC
+LIMIT 1;

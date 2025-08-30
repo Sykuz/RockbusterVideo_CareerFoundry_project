@@ -1,0 +1,5 @@
+Select every film from the “film” table, with the movies sorted by title from A to Z, then by most recent release year, and then by highest to lowest rental rate.
+
+SELECT title, release_year, rental_rate
+FROM film
+ORDER BY title ASC, release_year DESC, rental_rate DESC;

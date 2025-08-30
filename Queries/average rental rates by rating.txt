@@ -1,0 +1,5 @@
+Find the average rental_rate  of all films by rating.
+
+SELECT rating, AVG(rental_rate) AS avg_rental_rate
+FROM film
+GROUP BY rating:
