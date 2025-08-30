@@ -1,0 +1,31 @@
+CTE: Total company revenue
+WITH total_revenue AS (
+    SELECT SUM(p.amount) AS total_rev
+    FROM payment p
+),
+
+CTE: Revenue and rental count per country
+country_summary AS (
+    SELECT 
+        co.country,
+        SUM(p.amount) AS country_revenue,
+        COUNT(r.rental_id) AS rental_count
+    FROM payment p
+    JOIN rental r ON p.rental_id = r.rental_id
+    JOIN customer c ON p.customer_id = c.customer_id
+    JOIN address a ON c.address_id = a.address_id
+    JOIN city ci ON a.city_id = ci.city_id
+    JOIN country co ON ci.country_id = co.country_id
+    GROUP BY co.country
+)
+
+Final: add percentage and sort
+SELECT 
+    cs.country,
+    cs.country_revenue,
+    ROUND((cs.country_revenue * 100.0) / tr.total_rev, 2) AS percent_of_total_revenue,
+    cs.rental_count
+FROM country_summary cs
+JOIN total_revenue tr ON true
+ORDER BY cs.country_revenue DESC
+LIMIT 10;
