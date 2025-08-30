@@ -1,4 +1,0 @@
-Delete the Mystery category.
-
-  DELETE FROM category
-  WHERE name = 'Mystery'
