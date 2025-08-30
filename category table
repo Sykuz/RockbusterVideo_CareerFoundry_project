@@ -1,4 +1,0 @@
-View entire category table.
-
-  SELECT *
-  FROM category;
